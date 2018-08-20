@@ -42,8 +42,9 @@ public class StoreSample extends HttpServlet {
                       HttpServletResponse response)
         throws IOException, ServletException
     {
+        String word = "";
         try {
-            new TestApp().go(request);
+            word = new TestApp().go(request);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,7 +53,7 @@ public class StoreSample extends HttpServlet {
 
         PrintWriter out = response.getWriter();
 
-        out.println("I got the input from you");
+        out.println(word);
 
 
 
