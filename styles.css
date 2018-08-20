@@ -1,0 +1,21 @@
+body {
+  font-family: "M PLUS Rounded 1c", sans-serif;
+}
+
+.bold {
+  font-weight: bold;
+  font-family: "Crete Round", serif;
+  font-size: 25pt;
+}
+
+#next {
+  visibility: hidden;
+}
+
+#spellingPrompt {
+  margin-top: 18px;
+}
+
+#result {
+  margin-top: -50px;
+}

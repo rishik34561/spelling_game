@@ -8,40 +8,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>Test</title>
         <meta name="description" content="An interactive getting started guide for Brackets.">
-        <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css" />
         <link href="https://fonts.googleapis.com/css?family=M+PLUS+Rounded+1c" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Crete+Round" rel="stylesheet">
-        
-        <style>
-            body {
+        <link href="styles.css" rel="stylesheet" type="text/css">
 
-                font-family:'M PLUS Rounded 1c', sans-serif;
-
-            }
-
-            .bold {
-
-                font-weight: bold;
-                font-family: 'Crete Round', serif;
-                font-size: 25pt;
-
-            }
-
-            #next {
-                visibility: hidden;
-            }
-            
-            #spellingPrompt {
-                 margin-top: 18px;
-            }
-            
-            #result {
-                margin-top: -50px;
-            }
-            
-        </style>
-
-        
     </head>
 
     <body>
@@ -55,13 +26,13 @@
             String word = new WordPicker().getWord();
         %>
 
-            <input type="hidden" id="hiddenText" value=<%= word %> >
+            <input type="hidden" id="hiddenText" value=<%=word %> >
             <p class="ml-2">Listen to pronunciation</p>
             <audio id="audio" controls class="ml-2">
-                <source id="audioSource" src="https://ssl.gstatic.com/dictionary/static/sounds/oxford/<%= word %>--_gb_1.mp3" type="audio/mpeg">                
-                Your browser does not support the audio element.
+                <source id="audioSource" src="https://ssl.gstatic.com/dictionary/static/sounds/oxford/<%= word %>--_gb_1.mp3" type="audio/mpeg">                Your
+                browser does not support the audio element.
             </audio>
-           
+
             <br>
 
             <p id="spellingPrompt" class="ml-2">Type spelling here</p>
@@ -75,92 +46,94 @@
             <button class="btn btn-success ml-2 mb-2" id="next">Next</button>
             <br>
             <br>
-            <h4 class="ml-2">Points:<p class="badge ml-2 badge-primary"><span id="pointCounter"></span></p></h4>
+            <h4 class="ml-2">Points:
+                <p class="badge ml-2 badge-primary"><span id="pointCounter"></span></p>
+            </h4>
 
-            
+
             <script>
-            
-            
-            function validateForm() {
-                document.getElementById("submit").disabled = true;
-                var origWord = document.getElementById("hiddenText").value;
-                var x = document.getElementById("myText").value;
-                console.log(document.getElementById("hiddenText").value);
-                if (JSON.stringify(x) === JSON.stringify(origWord)) {                    
-                    console.log("correct");
-                    document.getElementById("result").innerHTML = "You are correct!";
-                    addPoints();
-                    document.getElementById("next").style.visibility = "visible";
+
+
+                function validateForm() {
+                    document.getElementById("submit").disabled = true;
+                    var origWord = document.getElementById("hiddenText").value;
+                    var x = document.getElementById("myText").value;
+                    console.log(document.getElementById("hiddenText").value);
+                    if (JSON.stringify(x) === JSON.stringify(origWord)) {
+                        console.log("correct");
+                        document.getElementById("result").innerHTML = "You are correct!";
+                        addPoints();
+                        document.getElementById("next").style.visibility = "visible";
+                    }
+                    else {
+                        console.log("incorrect, expected " + origWord + ", actual is " + x);
+                        document.getElementById("result").innerHTML = "You are incorrect!";
+                        subtractPoints();
+                        document.getElementById("next").style.visibility = "visible";
+                    }
                 }
-                else {
-                    console.log("incorrect, expected " + origWord + ", actual is " + x);
-                    document.getElementById("result").innerHTML = "You are incorrect!";
-                    subtractPoints();
-                    document.getElementById("next").style.visibility = "visible";
+
+                var points = 0;
+
+                function addPoints() {
+                    points += 1;
+                    document.getElementById("pointCounter").innerHTML = points;
+
                 }
-            }
 
-            var points = 0;
-            
-            function addPoints() {
-                points+=1;
-                document.getElementById("pointCounter").innerHTML = points;
-
-            }
-
-            function subtractPoints() {
-                points-=1;
-                document.getElementById("pointCounter").innerHTML = points;
+                function subtractPoints() {
+                    points -= 1;
+                    document.getElementById("pointCounter").innerHTML = points;
 
 
-            }
-
-            window.onload = function () {
-                document.getElementById("pointCounter").innerHTML = points;
-                document.getElementById("next").onclick = function () {
-                    makeRequest();
-                    document.getElementById("submit").disabled = false;
-                    document.getElementById("next").style.visibility = "hidden";
-                    document.getElementById("result").innerHTML = "";
-                    document.getElementById("myText").value = "";
-
-                    
                 }
-            }
-            
-            function makeRequest() {
-	           var xmlHttpRequest = new XMLHttpRequest();
-	           xmlHttpRequest.onreadystatechange = getReadyStateHandler(xmlHttpRequest);
-	           xmlHttpRequest.open("POST", "store/sample", true);
-	           xmlHttpRequest.setRequestHeader("Content-Type",
-			"application/x-www-form-urlencoded");
-	           xmlHttpRequest.send(null);
-            }
-            
-            function getReadyStateHandler(xmlHttpRequest) {
 
-	       // an anonymous function returned
-	       // it listens to the XMLHttpRequest instance
-	           return function() {
-		          if (xmlHttpRequest.readyState == 4) {
-			         if (xmlHttpRequest.status == 200) {
-                         document.getElementById("hiddenText").value = xmlHttpRequest.responseText.replace(/(\r\n\t|\n|\r\t)/gm,"");
-                        var audio = document.getElementById('audio');
+                window.onload = function () {
+                    document.getElementById("pointCounter").innerHTML = points;
+                    document.getElementById("next").onclick = function () {
+                        makeRequest();
+                        document.getElementById("submit").disabled = false;
+                        document.getElementById("next").style.visibility = "hidden";
+                        document.getElementById("result").innerHTML = "";
+                        document.getElementById("myText").value = "";
 
-				        document.getElementById("audioSource").src = "https://ssl.gstatic.com/dictionary/static/sounds/oxford/" + xmlHttpRequest.responseText + "--_gb_1.mp3";
-                        audio.load(); //call this to just preload the audio without playing
 
-			         } else {
-				        alert("HTTP error " + xmlHttpRequest.status + ": " + xmlHttpRequest.statusText);
-			         }
-		          }
-	           };
-            }
-            
-            
-        </script>
+                    }
+                }
 
-            
+                function makeRequest() {
+                    var xmlHttpRequest = new XMLHttpRequest();
+                    xmlHttpRequest.onreadystatechange = getReadyStateHandler(xmlHttpRequest);
+                    xmlHttpRequest.open("POST", "store/sample", true);
+                    xmlHttpRequest.setRequestHeader("Content-Type",
+                        "application/x-www-form-urlencoded");
+                    xmlHttpRequest.send(null);
+                }
+
+                function getReadyStateHandler(xmlHttpRequest) {
+
+                    // an anonymous function returned
+                    // it listens to the XMLHttpRequest instance
+                    return function () {
+                        if (xmlHttpRequest.readyState == 4) {
+                            if (xmlHttpRequest.status == 200) {
+                                document.getElementById("hiddenText").value = xmlHttpRequest.responseText.replace(/(\r\n\t|\n|\r\t)/gm, "");
+                                var audio = document.getElementById('audio');
+
+                                document.getElementById("audioSource").src = "https://ssl.gstatic.com/dictionary/static/sounds/oxford/" + xmlHttpRequest.responseText + "--_gb_1.mp3";
+                                audio.load(); //call this to just preload the audio without playing
+
+                            } else {
+                                alert("HTTP error " + xmlHttpRequest.status + ": " + xmlHttpRequest.statusText);
+                            }
+                        }
+                    };
+                }
+
+
+            </script>
+
+
 
     </body>
 
