@@ -9,7 +9,7 @@ import java.util.Properties;
 
 public class DBUtil {
     public static Connection getConnection() throws SQLException, ClassNotFoundException {
-        System.out.println("inside rishi.TestApp");
+        System.out.println("[DBUtil] inside rishi.TestApp");
 
         Connection con = null;
         PreparedStatement pstmt = null;

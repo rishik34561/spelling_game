@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.beans.Statement;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -38,13 +40,20 @@ import java.util.Set;
 public class StoreSample extends HttpServlet {
 
     @Override
+    public void init() {
+        SessionUtil.initialize();
+        System.out.println("session initialize called from Servlet init");
+
+    }
+
+    @Override
     public void doPost(HttpServletRequest request,
-                      HttpServletResponse response)
-        throws IOException, ServletException
+                       HttpServletResponse response)
+            throws IOException, ServletException
     {
         String word = "";
         try {
-            word = new TestApp().go(request);
+            word = new WordPicker().getWord(SessionUtil.getNextNumber(request));
         } catch (Exception e) {
             e.printStackTrace();
         }
