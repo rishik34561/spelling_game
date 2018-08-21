@@ -81,7 +81,6 @@
                         else {
                             console.log("incorrect, expected " + origWord + ", actual is " + x);
                             document.getElementById("result").innerHTML = "You are incorrect!";
-                            subtractPoints();
                             document.getElementById("next").style.visibility = "visible";
                         }
                     }
@@ -91,13 +90,6 @@
                     function addPoints() {
                         points += 1;
                         document.getElementById("pointCounter").innerHTML = points;
-
-                    }
-
-                    function subtractPoints() {
-                        points -= 1;
-                        document.getElementById("pointCounter").innerHTML = points;
-
 
                     }
 
